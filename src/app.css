@@ -18,6 +18,10 @@ input:focus{
   outline: none;
 }
 
+i{
+  margin-right: .5rem;
+}
+
 .circle{
   box-sizing: border-box;
   width: 25px;
@@ -50,70 +54,12 @@ input:focus{
   padding-left: 25%; 
   background-color: #282828;
   grid-area: logo;
-
 }
 
-.header{
-  display: flex;
-  align-items: center;
-  padding: 0 50px;
-  background-color: #2f2f2f;
-  grid-area: header;
-}
-
-  .search{
-    padding: 0 1rem;
-    flex-grow: 1;
-    height: 60%;
-    border-bottom: 3px solid #4a4a4a;
-    color: #959595;
-    font-size: 1.25rem;
-  }
-
-.aside{
-  padding: 50px 0;
-  background-color: #363636;
-  grid-area: aside;
-}
-
-  .menu__item{
-    cursor: pointer;
-    padding: 1rem;
-  }
-
-  .menu__item:hover{
-    background: linear-gradient(90deg, #f4566c, #f193fa);
-  }
 
 .main{
   padding: 50px 35px 0 35px;
   background-color: #1c1c1c;
   grid-area: main;
 }
-  .tasks-table{
-    border-spacing: 0;
-    width: 100%;
-    background-color: #2f2f2f;
-
-  }
-
-    .tasks-table td{
-      padding: 1rem;
-    }
-
-    .tasks-table td:first-child{
-      width: 5%;
-    }
-
-    .tasks-table .tasks-table__body tr{
-      padding: 0 0.5rem;
-      border-bottom: 3px solid #474747; 
-    }
-
-    .tasks-table .tasks-table td:first-child{
-      background-color: #2a2a2a
-    }
-
-  .tasks-table__header{
-    background-color: #424242;
-  }
+ 

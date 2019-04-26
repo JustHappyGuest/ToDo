@@ -1,0 +1,9 @@
+
+.search_input{
+    flex-grow: 1;
+    height: 60%;
+    border-bottom: 3px solid #4a4a4a;
+    color: #959595;
+    font-size: 1.25rem;
+    padding: 0 .5rem;
+  }

@@ -1,0 +1,18 @@
+.aside{
+    padding: 50px 0;
+    background-color: #363636;
+    grid-area: aside;
+  }
+
+  .menu{
+
+  }
+
+  .menu_item{
+    cursor: pointer;
+    padding: 1rem;
+  }
+
+  .menu_item:hover{
+    background: linear-gradient(90deg, #f4566c, #f193fa);
+  }
