@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import Tasks from "../components/Tasks";
-import { newTask } from "../actionCreaters";
+import { newTask, changeDescripton, cancelUpdate, changeDeadline } from "../actionCreaters";
 
 const mapStateToProps = state => {
     return {
@@ -10,7 +10,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        newTask: () => dispatch(newTask())
+        newTask: () => dispatch(newTask()),
+        changeDescription: (id, value) => dispatch(changeDescripton(id, value)),
+        changeDeadline: (id, direction) => dispatch(changeDeadline(id, direction)),
+        cancelUpdate: id => dispatch(cancelUpdate(id))
     }
 }
 

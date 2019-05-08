@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "./style.module.css";
 
+
 const Task = props => {
     return (
         <tr className={styled.row}>
@@ -11,7 +12,7 @@ const Task = props => {
                 {props.data.description}
             </td>
             <td className={styled.deadline}>
-                {props.data.deadline}
+                {props.data.deadline.toFormat("HH:mm")}
             </td>
             <td className={styled.control}></td>
             <td className={styled.menu}>
@@ -37,15 +38,16 @@ const UpdateTask = props => {
                     placeholder="Введите название задачи ..." 
                     type="text" 
                     value={props.description}
+                    onChange={(e)=>props.changeDescription(props.id ,e.target.value)}
                 />
             </td>  
             <td className={styled.deadline}>
-                <button className={styled.btn}><i className="fas fa-minus-square"></i></button>
-                <span className={styled.showTime}>{props.deadline}</span>
-                <button className={styled.btn}><i className="fas fa-plus-square"></i></button>
+                <button className={styled.btn} onClick={() => props.changeDeadline(props.id, false)}><i className="fas fa-minus-square"></i></button>
+                <span className={styled.showTime}>{props.deadline.toFormat("HH:mm")}</span>
+                <button className={styled.btn} onClick={() => props.changeDeadline(props.id, true)}><i className="fas fa-plus-square"></i></button>
             </td>
             <td className={styled.control}>
-                <button className={styled.btn}><i className="fas fa-ban"></i></button>
+                <button className={styled.btn} onClick={()=>props.cancelUpdate(props.id)}><i className="fas fa-ban"></i></button>
             </td>
             <td className={styled.control}>
                 <button className={styled.btn}><i className="fas fa-check"></i></button>
@@ -60,7 +62,14 @@ const Tasks = (props) => {
         return (
             (!updating)
                 ?<Task {...task} />
-                :<UpdateTask {...updating} />
+                :
+                    <UpdateTask 
+                        id = {task.id}
+                        {...updating}
+                        changeDescription = {props.changeDescription}
+                        changeDeadline = {props.changeDeadline}
+                        cancelUpdate = {props.cancelUpdate}
+                    />
         );
     });
     return (

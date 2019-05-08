@@ -1,4 +1,9 @@
-import { NEW_TASK } from "../actionCreaters";
+import { NEW_TASK, CHANGE_DESCRIPTION, CANCEL_UPDATE, CHANGE_DEADLINE } from "../actionCreaters";
+import {DateTime, Duration} from "luxon";
+
+let date = Duration.fromObject({hours: 1, minutes:2});
+date = date.plus({hours: 0});
+console.log(date.hours);
 
 let initialState = {
     idController: 3,
@@ -8,7 +13,7 @@ let initialState = {
             selected: false,
             data:{
                 description: "First task",
-                deadline: "00:00"
+                deadline: DateTime.local().startOf('day')
             },
             dateCreated: null,
             complete: false,
@@ -21,7 +26,7 @@ let initialState = {
             selected: false,
             data:{
                 description: "Second task",
-                deadline: "00:00"
+                deadline: DateTime.local().startOf('day')
             },
             dateCreated: null,
             complete: false,
@@ -34,7 +39,7 @@ let initialState = {
             selected: false,
             data:{
                 description: "Third task",
-                deadline: "00:00"
+                deadline: DateTime.local().startOf('day')
             },
             dateCreated: null,
             complete: false,
@@ -55,19 +60,70 @@ const controlTasks = (state = initialState, action) => {
                 id: ++state.idController, 
                 selected: false,
                 data:{
-                    description: "Third task",
-                    deadline: "00:00"
+                    description: "",
+                    deadline: ""
                 },
                 dateCreated: null,
                 complete: false,
                 missed: false,
                 updating: {
                     description : "",
-                    deadline : "00:00",
+                    deadline : DateTime.local().startOf('hour')
                 },
                 dropdown: false
             }
             state.tasks.unshift(task);
+            return state;
+        case CHANGE_DESCRIPTION:
+            state.tasks  = [...state.tasks];
+            state.tasks = state.tasks.map(item => {
+                if(item.id === action.id) 
+                    item.updating = {
+                        description: action.value,
+                        deadline: item.updating.deadline
+                    }   
+                return item;
+            });
+            return state;
+        case CHANGE_DEADLINE:
+            state.tasks = [...state.tasks];
+            let day;
+            state.tasks.forEach(item => {
+                if(item.id === action.id) day = item.updating.deadline.day
+            });
+            
+            if(action.direction){
+                state.tasks = state.tasks.map(item => {
+                    if(item.id === action.id) 
+                        item.updating = {
+                            description: item.updating.description,
+                            deadline: item.updating.deadline.plus({minutes:30})
+                        }   
+                    return item;
+                });
+            }else{
+                state.tasks = state.tasks.map(item => {
+                    if(item.id === action.id) 
+                        item.updating = {
+                            description: item.updating.description,
+                            deadline: item.updating.deadline.minus({minutes:30})
+                        }   
+                    return item;
+                });
+            }
+            
+            state.tasks.forEach(item => {
+                if(item.id === action.id) item.updating.deadline = item.updating.deadline.set({day: day})
+            });
+
+            return state;
+        case CANCEL_UPDATE:
+            state.tasks  = [...state.tasks];
+            state.tasks = state.tasks.map(item => {
+                if(item.id === action.id)item.updating = null
+                return item;
+            });
+            state.tasks = state.tasks.filter(item => !((item.id === action.id) && !item.data.description));
             return state;
         default:
             return state;
