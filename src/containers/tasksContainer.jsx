@@ -1,13 +1,19 @@
 import {connect} from "react-redux";
 import Tasks from "../components/Tasks";
+import { newTask } from "../actionCreaters";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
-        newTask: state.tasks.newTask,
-        tasks: state.tasks.data
+        tasks: state.controlTasks.tasks
     }
 }
 
-const TasksContainer = connect(mapStateToProps)(Tasks);
+const mapDispatchToProps = dispatch => {
+    return {
+        newTask: () => dispatch(newTask())
+    }
+}
+
+const TasksContainer = connect(mapStateToProps, mapDispatchToProps)(Tasks);
 
 export default TasksContainer;

@@ -9,17 +9,20 @@ html, body, #root{
   height: 100%;
 }
 
-input{
+input, button{
   border: none;
   background: none;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
-input:focus{
+input:focus, button:focus{
   outline: none;
 }
 
-i{
-  margin-right: .5rem;
+li{
+  list-style: none;
 }
 
 .circle{
@@ -54,6 +57,10 @@ i{
   padding-left: 25%; 
   background-color: #282828;
   grid-area: logo;
+}
+
+.logo i{
+  margin-right: .5rem;
 }
 
 

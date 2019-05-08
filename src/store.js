@@ -1,7 +1,7 @@
 import { createStore, combineReducers } from "redux";
-import tasks from "./reducers/tasks";
+import controlTasks from "./reducers/controlTasks";
 
-let  reducers = combineReducers({tasks});
+let  reducers = combineReducers({controlTasks});
 
 let store = createStore(reducers);
 
