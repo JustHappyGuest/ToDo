@@ -17,7 +17,7 @@ const Task = props => {
             <td className={styled.control}></td>
             <td className={styled.menu}>
                 <button className={styled.btn}><i className="fas fa-ellipsis-v"></i></button>
-                <ul className={styled.dropdown}>
+                <ul className={styled.dropdown +" "+(props.dropdown ? styled.show : "")}>
                     <li className={styled.item}>Выполнено</li>
                     <li className={styled.item}>Изменить</li>
                     <li className={styled.item}>Удалить</li>
@@ -50,7 +50,7 @@ const UpdateTask = props => {
                 <button className={styled.btn} onClick={()=>props.cancelUpdate(props.id)}><i className="fas fa-ban"></i></button>
             </td>
             <td className={styled.control}>
-                <button className={styled.btn}><i className="fas fa-check"></i></button>
+                <button className={styled.btn} onClick={()=>props.addTask(props.id)}><i className="fas fa-check"></i></button>
             </td>
         </tr>
     )
@@ -61,7 +61,10 @@ const Tasks = (props) => {
         let {updating, ...task} = item;
         return (
             (!updating)
-                ?<Task {...task} />
+                ?   
+                    <Task 
+                        {...task} 
+                    />
                 :
                     <UpdateTask 
                         id = {task.id}
@@ -69,6 +72,7 @@ const Tasks = (props) => {
                         changeDescription = {props.changeDescription}
                         changeDeadline = {props.changeDeadline}
                         cancelUpdate = {props.cancelUpdate}
+                        addTask = {props.addTask}
                     />
         );
     });
