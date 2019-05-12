@@ -1,4 +1,4 @@
-import { NEW_TASK, CHANGE_DESCRIPTION, CANCEL_UPDATE, CHANGE_DEADLINE, ADD_TASK, SHOW_DROPDOWN, DELETE_TASK, UPDATE_TASK, SELECT_TASK, SELECT_ALL_TASK, CHANGE_SEARCH } from "../actionCreaters";
+import { NEW_TASK, CHANGE_DESCRIPTION, CANCEL_UPDATE, CHANGE_DEADLINE, ADD_TASK, SHOW_DROPDOWN, DELETE_TASK, UPDATE_TASK, SELECT_TASK, SELECT_ALL_TASK, CHANGE_SEARCH, COMPLETE_TASK } from "../actionCreaters";
 import { DateTime } from "luxon";
 import {cloneDeep} from "lodash"
 
@@ -40,7 +40,7 @@ let initialState = {
                 deadline: DateTime.local().startOf('day')
             },
             dateCreated: null,
-            complete: false,
+            complete: true,
             missed: false,
             updating: null,
             dropdown: false
@@ -85,6 +85,15 @@ const controlTasks = (state = initialState, action) => {
                     item.dropdown = false
                 }
       
+                return item;
+            });
+            return state;
+        case COMPLETE_TASK:
+            state.tasks = state.tasks.map(item => {
+                if (item.id === action.id){
+                    item.complete = true
+                    item.dropdown = false
+                }
                 return item;
             });
             return state;
@@ -170,7 +179,6 @@ const controlTasks = (state = initialState, action) => {
         });
             return state;
         case SELECT_ALL_TASK:
-            console.log("as");
             if(state.tasks.every(item => item.selected)){
                 state.tasks = state.tasks.map(item => {
                     item.selected = false;

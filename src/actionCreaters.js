@@ -9,6 +9,7 @@ export const DELETE_TASK = "DELETE_TASK";
 export const UPDATE_TASK = "UPDATE_TASK";
 export const SELECT_TASK = "SELECT_TASK";
 export const SELECT_ALL_TASK = "SELECT_ALL_TASK";
+export const COMPLETE_TASK = "COMPLETE_TASK";
 
 export const changeSearch = (value) => ({type: CHANGE_SEARCH, value: value});
 export const newTask = () => ({type: NEW_TASK});
@@ -21,3 +22,4 @@ export const deleteTask = id => ({type: DELETE_TASK, id: id});
 export const updateTask = id => ({type: UPDATE_TASK, id: id});
 export const selectTask = id => ({type: SELECT_TASK, id: id});
 export const selectAllTask = () => ({type: SELECT_ALL_TASK});
+export const completeTask = id => ({type: COMPLETE_TASK, id: id});

@@ -4,7 +4,7 @@ import { newTask, changeDescripton, cancelUpdate, changeDeadline, addTask, showD
 
 const mapStateToProps = state => {
     return {
-        complete: false,
+        complete: true,
         search: state.controlTasks.search,
         tasks: state.controlTasks.tasks
     }
@@ -26,6 +26,6 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-const TasksContainer = connect(mapStateToProps, mapDispatchToProps)(Tasks);
+const CompleteTasksContainer = connect(mapStateToProps, mapDispatchToProps)(Tasks);
 
-export default TasksContainer;
+export default CompleteTasksContainer;

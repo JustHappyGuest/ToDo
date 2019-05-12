@@ -5,9 +5,9 @@ const Aside = (props) => {
     return (
         <aside className={styled.aside}>
             <ul className={styled.menu}>
-            <li className={styled.menu_item}><i class="fas fa-tasks"></i>Задачи</li>
-            <li className={styled.menu_item}><i class="fas fa-object-group"></i>Группы</li>
-            <li className={styled.menu_item}><i class="fas fa-cogs"></i>Настройки</li>
+                <li className={styled.menu_item}><i class="fas fa-tasks"></i>Задачи</li>
+                <li className={styled.menu_item}><i class="fas fa-object-group"></i>Группы</li>
+                <li className={styled.menu_item}><i class="fas fa-cogs"></i>Настройки</li>
             </ul>
         </aside>
     );

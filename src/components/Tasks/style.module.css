@@ -4,18 +4,44 @@
     margin: 30px 0;
 }
 
-.selector, .control, .menu{
+.selector, .control{
     width: 3%;
 }
 
+.control{
+    text-align: right;
+}
+
+.control > .btn{
+    margin-right: 15px;
+}
+
+.control > .btn:last-child{
+    margin-right: 0;
+}
+
 .menu{
+    width: 12%;
+    text-align: right;
     position: relative;
+}
+
+.containerMenu > .btn{
+    margin-right: 5px;  
+    padding: 6px 3px;
+    
+}
+
+.containerMenu{
+    border-radius: 5px; 
+    background-color: #2f2f2f;
 }
 
 .dropdown{
     display: none;
     position: absolute;
-    transform: translateX(calc(-100% - 5px));
+    z-index: 2;
+    right: 20%;
     top:15px;
 }
 
