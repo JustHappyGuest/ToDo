@@ -1,4 +1,4 @@
-import { NEW_TASK, CHANGE_DESCRIPTION, CANCEL_UPDATE, CHANGE_DEADLINE, ADD_TASK } from "../actionCreaters";
+import { NEW_TASK, CHANGE_DESCRIPTION, CANCEL_UPDATE, CHANGE_DEADLINE, ADD_TASK, SHOW_DROPDOWN, DELETE_TASK, UPDATE_TASK, SELECT_TASK, SELECT_ALL_TASK } from "../actionCreaters";
 import { DateTime } from "luxon";
 import {cloneDeep} from "lodash"
 
@@ -71,6 +71,19 @@ const controlTasks = (state = initialState, action) => {
             }
             state.tasks.unshift(task);
             return state;
+        case UPDATE_TASK:
+            state.tasks = state.tasks.map(item => {
+                if (item.id === action.id){
+                    item.updating = {
+                        description: item.data.description,
+                        deadline: item.data.deadline
+                    }
+                    item.dropdown = false
+                }
+      
+                return item;
+            });
+            return state;
         case CHANGE_DESCRIPTION:
             state.tasks = [...state.tasks];
             state.tasks = state.tasks.map(item => {
@@ -131,6 +144,40 @@ const controlTasks = (state = initialState, action) => {
                 return item;
             });
             
+            return state;
+        case SHOW_DROPDOWN:
+            state.tasks = [...state.tasks];
+            state.tasks.forEach(item => {
+                if(item.id === action.id){
+                    item.dropdown = !item.dropdown;
+                }else{
+                    item.dropdown = false;
+                }
+            });
+            return state;
+        case DELETE_TASK:
+            state.tasks = state.tasks.filter(item => item.id !== action.id);
+            return state;
+        case SELECT_TASK:
+        state.tasks = state.tasks.map(item => {
+            if (item.id === action.id) 
+                item.selected = !item.selected
+            return item;
+        });
+            return state;
+        case SELECT_ALL_TASK:
+            console.log("as");
+            if(state.tasks.every(item => item.selected)){
+                state.tasks = state.tasks.map(item => {
+                    item.selected = false;
+                    return item
+                })
+            }else{
+                state.tasks = state.tasks.map(item => {
+                    item.selected = true;
+                    return item
+                })
+            }
             return state;
         default:
             return state;

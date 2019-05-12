@@ -1,12 +1,18 @@
 import React from "react";
 import styled from "./style.module.css";
+import { showDropdown } from "../../actionCreaters";
 
 
 const Task = props => {
     return (
         <tr className={styled.row}>
             <td className={styled.selector}>
-                <button className={styled.btn}><i className="far fa-circle"></i></button>
+                <button className={styled.btn} onClick={()=>props.selectTask(props.id)}>
+                    {props.selected
+                        ?<i className="fas fa-circle"></i>
+                        :<i className="far fa-circle"></i>
+                    } 
+                </button>
             </td>
             <td className={styled.description}>
                 {props.data.description}
@@ -16,11 +22,11 @@ const Task = props => {
             </td>
             <td className={styled.control}></td>
             <td className={styled.menu}>
-                <button className={styled.btn}><i className="fas fa-ellipsis-v"></i></button>
+                <button className={styled.btn} onClick={()=>props.showDropdown(props.id)}><i className="fas fa-ellipsis-v"></i></button>
                 <ul className={styled.dropdown +" "+(props.dropdown ? styled.show : "")}>
                     <li className={styled.item}>Выполнено</li>
-                    <li className={styled.item}>Изменить</li>
-                    <li className={styled.item}>Удалить</li>
+                    <li className={styled.item} onClick={() => props.updateTask(props.id)}>Изменить</li>
+                    <li className={styled.item} onClick={() => props.deleteTask(props.id)}>Удалить</li>
                 </ul>
             </td>
         </tr>
@@ -63,7 +69,11 @@ const Tasks = (props) => {
             (!updating)
                 ?   
                     <Task 
-                        {...task} 
+                        {...task}
+                        showDropdown = {props.showDropdown}
+                        deleteTask = {props.deleteTask}
+                        updateTask = {props.updateTask}
+                        selectTask = {props.selectTask}
                     />
                 :
                     <UpdateTask 
@@ -82,9 +92,16 @@ const Tasks = (props) => {
         <table className={styled.table}>
             <thead className={styled.thead}>
                 <tr className={styled.row}>
-                   <td className={styled.selector}><i className="far fa-circle"></i></td>
-                   <td className={styled.description}>Описание &#9660;</td>
-                   <td className={styled.deadline}>Дедлайн &#9660;</td>
+                    <td className={styled.selector}>
+                        <button className={styled.btn} onClick={props.selectAllTask}>
+                            {props.tasks.every(item => item.selected)
+                                ?<i className="fas fa-circle"></i>
+                                :<i className="far fa-circle"></i>
+                            } 
+                        </button>
+                    </td>
+                   <td className={styled.description}>Описание</td>
+                   <td className={styled.deadline}>Дедлайн</td>
                    <td className={styled.control}>
                         <button className={styled.btn} onClick={props.newTask}><i className="fas fa-plus"></i></button>
                     </td>
