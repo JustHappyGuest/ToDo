@@ -1,8 +1,9 @@
-import { NEW_TASK, CHANGE_DESCRIPTION, CANCEL_UPDATE, CHANGE_DEADLINE, ADD_TASK, SHOW_DROPDOWN, DELETE_TASK, UPDATE_TASK, SELECT_TASK, SELECT_ALL_TASK } from "../actionCreaters";
+import { NEW_TASK, CHANGE_DESCRIPTION, CANCEL_UPDATE, CHANGE_DEADLINE, ADD_TASK, SHOW_DROPDOWN, DELETE_TASK, UPDATE_TASK, SELECT_TASK, SELECT_ALL_TASK, CHANGE_SEARCH } from "../actionCreaters";
 import { DateTime } from "luxon";
 import {cloneDeep} from "lodash"
 
 let initialState = {
+    search : "",
     idController: 3,
     tasks: [
         {
@@ -50,6 +51,9 @@ let initialState = {
 const controlTasks = (state = initialState, action) => {
     state = { ...state };
     switch (action.type) {
+        case CHANGE_SEARCH:
+            state.search = action.value;
+            return state;
         case NEW_TASK:
             state.tasks = [...state.tasks];
             state.tasks.data = { ...state.tasks.data };

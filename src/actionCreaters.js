@@ -1,3 +1,4 @@
+export const CHANGE_SEARCH = "CHANGE_SEARCH";
 export const NEW_TASK = "NEW_TASK";
 export const CHANGE_DESCRIPTION = "CHANGE_DESCRIPTION";
 export const CHANGE_DEADLINE = "CHANGE_DEADLINE";
@@ -9,6 +10,7 @@ export const UPDATE_TASK = "UPDATE_TASK";
 export const SELECT_TASK = "SELECT_TASK";
 export const SELECT_ALL_TASK = "SELECT_ALL_TASK";
 
+export const changeSearch = (value) => ({type: CHANGE_SEARCH, value: value});
 export const newTask = () => ({type: NEW_TASK});
 export const changeDescripton = (id ,value) => ({type: CHANGE_DESCRIPTION,id: id ,value: value});
 export const changeDeadline = (id, direction) => ({type:CHANGE_DEADLINE,id: id, direction: direction});

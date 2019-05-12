@@ -4,6 +4,7 @@ import { newTask, changeDescripton, cancelUpdate, changeDeadline, addTask, showD
 
 const mapStateToProps = state => {
     return {
+        search: state.controlTasks.search,
         tasks: state.controlTasks.tasks
     }
 }

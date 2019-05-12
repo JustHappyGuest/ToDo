@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "./style.module.css";
 
-import Search from "../Search";
+import SearchContainer from "../../containers/searchContainer";
 
 const Header = (props) => {
     return (
         <header className={styled.header}>
-            <Search />
+            <SearchContainer />
         </header>
     );
 }

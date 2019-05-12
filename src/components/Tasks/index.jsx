@@ -63,7 +63,9 @@ const UpdateTask = props => {
 }
 
 const Tasks = (props) => {
-    const taskList = props.tasks.map(item => {
+    let taskList = props.tasks.filter(item => item.data.description.toLowerCase().indexOf(props.search.toLowerCase())+1);
+    console.log(taskList);
+    taskList = taskList.map(item => {
         let {updating, ...task} = item;
         return (
             (!updating)
