@@ -13,13 +13,16 @@ import {
             selectAllTasks, 
             completeTask, 
             deleteSelectedTasks,
-            completeSelectedTasks
+            completeSelectedTasks,
+            updateSelectedTasks,
+            checkTasksDeadline
         } from "../actionCreaters";
 
 const mapStateToProps = state => {
     return {
         title: "Активные задачи",
         complete: false,
+        missed: false,
         search: state.controlTasks.search,
         tasks: state.controlTasks.tasks
     }
@@ -36,11 +39,12 @@ const mapDispatchToProps = dispatch => {
         deleteTask: id => dispatch(deleteTask(id)),
         deleteSelectedTasks: () => dispatch(deleteSelectedTasks()),
         updateTask: id => dispatch(updateTask(id)),
+        updateSelectedTasks: () => dispatch(updateSelectedTasks()),
         selectTask: id => dispatch(selectTask(id)),
         selectAllTasks: () => dispatch(selectAllTasks()),
         completeTask: id => dispatch(completeTask(id)),
-        completeSelectedTasks: () => dispatch(completeSelectedTasks())
-
+        completeSelectedTasks: () => dispatch(completeSelectedTasks()),
+        checkTasksDeadline: () => dispatch(checkTasksDeadline())
     }
 }
 

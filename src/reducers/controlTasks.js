@@ -12,7 +12,9 @@ import {
         COMPLETE_TASK, 
         DELETE_SELECTED_TASKS, 
         SELECT_ALL_TASKS,
-        COMPLETE_SELECTED_TASKS} from "../actionCreaters";
+        COMPLETE_SELECTED_TASKS,
+        UPDATE_SELECTED_TASKS,
+        CHECK_TASKS_DEADLINE} from "../actionCreaters";
 import { DateTime } from "luxon";
 import {cloneDeep} from "lodash"
 
@@ -54,8 +56,8 @@ let initialState = {
                 deadline: DateTime.local().startOf('day')
             },
             dateCreated: null,
-            complete: true,
-            missed: false,
+            complete: false,
+            missed: true,
             updating: null,
             dropdown: false
         },
@@ -99,6 +101,17 @@ const controlTasks = (state = initialState, action) => {
                     item.dropdown = false
                 }
       
+                return item;
+            });
+            return state;
+        case UPDATE_SELECTED_TASKS:
+            state.tasks = state.tasks.map(item => {
+                if(item.selected)
+                    item.updating = {
+                        description: item.data.description,
+                        deadline: item.data.deadline
+                    }
+                item.selected = false;
                 return item;
             });
             return state;
@@ -216,6 +229,15 @@ const controlTasks = (state = initialState, action) => {
                     return item
                 })
             }
+            return state;
+        case CHECK_TASKS_DEADLINE:
+            state.tasks = state.tasks.map(item => {
+                if((item.updating || item.missed || item.complete) ? false : item.data.deadline.diff(DateTime.local()) <= 0){
+                    item.missed = true;
+                }
+
+                return item;
+            });
             return state;
         default:
             return state;

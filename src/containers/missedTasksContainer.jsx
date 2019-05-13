@@ -3,14 +3,14 @@ import Tasks from "../components/Tasks";
 
 const mapStateToProps = state => {
     return {
-        title:"Завершенные задачи",
-        complete: true,
-        missed: false,
+        title:"Пропущенные задачи",
+        complete: false,
+        missed: true,
         search: state.controlTasks.search,
         tasks: state.controlTasks.tasks
     }
 }
 
-const CompleteTasksContainer = connect(mapStateToProps)(Tasks);
+const MissedTasksContainer = connect(mapStateToProps)(Tasks);
 
-export default CompleteTasksContainer;
+export default MissedTasksContainer;
