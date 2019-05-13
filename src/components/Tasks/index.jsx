@@ -74,7 +74,9 @@ const UpdateTask = props => {
 }
 
 const Tasks = (props) => {
-    let taskList = props.tasks.filter(item => !!item.data.description.toLowerCase().indexOf(props.search.toLowerCase())+1 && (props.complete) ? item.complete : !item.complete);
+    let taskList = props.tasks.filter(item => 
+                                        !!(item.data.description.toLowerCase().indexOf(props.search.toLowerCase())+1)
+                                        && ((props.complete) ? item.complete : !item.complete));
     taskList = taskList.map(item => {
         let {updating, ...task} = item;
         return (
@@ -102,7 +104,7 @@ const Tasks = (props) => {
     });
     return (
     <section className={styled.tasks}>
-        <h2 className={styled.title}>Активные задачи</h2>
+        <h2 className={styled.title}>{props.title}</h2>
         <table className={styled.table}>
             <thead className={styled.thead}>
                 <tr className={styled.row}>
@@ -110,8 +112,8 @@ const Tasks = (props) => {
                         {
                             !props.complete
                                 ? 
-                                    <button className={styled.btn} onClick={props.selectAllTask}>
-                                        {props.tasks.every(item => item.selected)
+                                    <button className={styled.btn} onClick={props.selectAllTasks}>
+                                        {props.tasks.every(item => item.selected || item.complete || item.missed)
                                             ?<i className="fas fa-circle"></i>
                                             :<i className="far fa-circle"></i>
                                         } 
@@ -134,9 +136,9 @@ const Tasks = (props) => {
                             !props.complete
                                 ? 
                                     <div className={styled.containerMenu}>
-                                        <button className={styled.btn}><i class="far fa-check-circle"></i></button>
+                                        <button className={styled.btn} onClick={props.completeSelectedTasks}><i class="far fa-check-circle"></i></button>
                                         <button className={styled.btn}><i class="fas fa-edit"></i></button>
-                                        <button className={styled.btn}><i class="far fa-times-circle"></i></button>
+                                        <button className={styled.btn} onClick={props.deleteSelectedTasks}><i class="far fa-times-circle"></i></button>
                                     </div>
                                 : ""
                         }

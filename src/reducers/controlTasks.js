@@ -1,4 +1,18 @@
-import { NEW_TASK, CHANGE_DESCRIPTION, CANCEL_UPDATE, CHANGE_DEADLINE, ADD_TASK, SHOW_DROPDOWN, DELETE_TASK, UPDATE_TASK, SELECT_TASK, SELECT_ALL_TASK, CHANGE_SEARCH, COMPLETE_TASK } from "../actionCreaters";
+import { 
+        NEW_TASK, 
+        CHANGE_DESCRIPTION, 
+        CANCEL_UPDATE, 
+        CHANGE_DEADLINE, 
+        ADD_TASK, 
+        SHOW_DROPDOWN, 
+        DELETE_TASK, 
+        UPDATE_TASK, 
+        SELECT_TASK, 
+        CHANGE_SEARCH, 
+        COMPLETE_TASK, 
+        DELETE_SELECTED_TASKS, 
+        SELECT_ALL_TASKS,
+        COMPLETE_SELECTED_TASKS} from "../actionCreaters";
 import { DateTime } from "luxon";
 import {cloneDeep} from "lodash"
 
@@ -97,6 +111,13 @@ const controlTasks = (state = initialState, action) => {
                 return item;
             });
             return state;
+        case COMPLETE_SELECTED_TASKS:
+            state.tasks = state.tasks.map(item => {
+                if(item.selected)
+                    item.complete = true;
+                return item;
+            });
+            return state;
         case CHANGE_DESCRIPTION:
             state.tasks = [...state.tasks];
             state.tasks = state.tasks.map(item => {
@@ -171,6 +192,9 @@ const controlTasks = (state = initialState, action) => {
         case DELETE_TASK:
             state.tasks = state.tasks.filter(item => item.id !== action.id);
             return state;
+        case DELETE_SELECTED_TASKS:
+            state.tasks = state.tasks.filter(item => !item.selected);
+            return state;
         case SELECT_TASK:
         state.tasks = state.tasks.map(item => {
             if (item.id === action.id) 
@@ -178,15 +202,17 @@ const controlTasks = (state = initialState, action) => {
             return item;
         });
             return state;
-        case SELECT_ALL_TASK:
-            if(state.tasks.every(item => item.selected)){
+        case SELECT_ALL_TASKS:
+            if(state.tasks.every(item => item.selected || item.complete || item.missed)){
                 state.tasks = state.tasks.map(item => {
-                    item.selected = false;
+                    if(!item.complete && !item.missed)
+                        item.selected = false;
                     return item
                 })
             }else{
                 state.tasks = state.tasks.map(item => {
-                    item.selected = true;
+                    if(!item.complete && !item.missed)
+                        item.selected = true;
                     return item
                 })
             }

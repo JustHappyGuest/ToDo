@@ -1,9 +1,24 @@
 import {connect} from "react-redux";
 import Tasks from "../components/Tasks";
-import { newTask, changeDescripton, cancelUpdate, changeDeadline, addTask, showDropdown, deleteTask, updateTask, selectTask, selectAllTask, completeTask } from "../actionCreaters";
+import { 
+            newTask, 
+            changeDescripton, 
+            cancelUpdate, 
+            changeDeadline, 
+            addTask, 
+            showDropdown, 
+            deleteTask, 
+            updateTask, 
+            selectTask, 
+            selectAllTasks, 
+            completeTask, 
+            deleteSelectedTasks,
+            completeSelectedTasks
+        } from "../actionCreaters";
 
 const mapStateToProps = state => {
     return {
+        title: "Активные задачи",
         complete: false,
         search: state.controlTasks.search,
         tasks: state.controlTasks.tasks
@@ -19,10 +34,13 @@ const mapDispatchToProps = dispatch => {
         addTask: id => dispatch(addTask(id)),
         showDropdown: id => dispatch(showDropdown(id)),
         deleteTask: id => dispatch(deleteTask(id)),
+        deleteSelectedTasks: () => dispatch(deleteSelectedTasks()),
         updateTask: id => dispatch(updateTask(id)),
         selectTask: id => dispatch(selectTask(id)),
-        selectAllTask: () => dispatch(selectAllTask()),
-        completeTask: id => dispatch(completeTask(id))
+        selectAllTasks: () => dispatch(selectAllTasks()),
+        completeTask: id => dispatch(completeTask(id)),
+        completeSelectedTasks: () => dispatch(completeSelectedTasks())
+
     }
 }
 
