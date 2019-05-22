@@ -5,7 +5,7 @@
   margin: 0;
 }
 
-html, body, #root{
+html, body, :global(#root){
   height: 100%;
 }
 
@@ -32,7 +32,7 @@ li{
   list-style: none;
 }
 
-.circle{
+:global(.circle){
   box-sizing: border-box;
   width: 25px;
   height: 25px;
@@ -42,11 +42,11 @@ li{
   cursor: pointer;
 }
 
-.circle:hover{
+:global(.circle:hover){
   background-color: #9c9c9c;
 }
 
-.app{
+:global(.app){
   font-family: Ubuntu;
   color: #eee;
   height: 100%;
@@ -58,7 +58,7 @@ li{
   "aside main";
 }
 
-.logo{
+:global(.logo){
   display: flex;
   align-items: center;
   padding-left: 25%; 
@@ -66,12 +66,12 @@ li{
   grid-area: logo;
 }
 
-.logo i{
+:global(.logo) i{
   margin-right: .5rem;
 }
 
 
-.main{
+:global(.main){
   padding: 50px 35px 0 35px;
   background-color: #1c1c1c;
   grid-area: main;

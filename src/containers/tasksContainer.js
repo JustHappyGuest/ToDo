@@ -15,7 +15,8 @@ import {
             deleteSelectedTasks,
             completeSelectedTasks,
             updateSelectedTasks,
-            checkTasksDeadline
+            checkTasksDeadline,
+            loadTasks
         } from "../actionCreaters";
 
 const mapStateToProps = state => {
@@ -30,6 +31,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        loadTasks: (tasks) => dispatch(loadTasks(tasks)),
         newTask: () => dispatch(newTask()),
         changeDescription: (id, value) => dispatch(changeDescripton(id, value)),
         changeDeadline: (id, direction) => dispatch(changeDeadline(id, direction)),

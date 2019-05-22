@@ -4,8 +4,6 @@ import styled from "./style.module.css";
 import TaskList from "./TaskList";
 import HeaderTasks from "./HeaderTasks";
 
-import { DateTime } from "luxon";
-
 
 class Tasks extends React.Component {
     componentDidMount(){

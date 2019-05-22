@@ -14,59 +14,28 @@ import {
         SELECT_ALL_TASKS,
         COMPLETE_SELECTED_TASKS,
         UPDATE_SELECTED_TASKS,
-        CHECK_TASKS_DEADLINE} from "../actionCreaters";
+        CHECK_TASKS_DEADLINE,
+        LOAD_TASKS} from "../actionCreaters";
 import { DateTime } from "luxon";
 import {cloneDeep} from "lodash"
 
 let initialState = {
     search : "",
-    idController: 3,
-    tasks: [
-        {
-            id: 3,
-            selected: false,
-            data: {
-                description: "First task",
-                deadline: DateTime.local().startOf('day')
-            },
-            dateCreated: null,
-            complete: false,
-            missed: false,
-            updating: null,
-            dropdown: false
-        },
-        {
-            id: 2,
-            selected: false,
-            data: {
-                description: "Second task",
-                deadline: DateTime.local().startOf('day')
-            },
-            dateCreated: null,
-            complete: false,
-            missed: false,
-            updating: null,
-            dropdown: false
-        },
-        {
-            id: 1,
-            selected: false,
-            data: {
-                description: "Third task",
-                deadline: DateTime.local().startOf('day')
-            },
-            dateCreated: null,
-            complete: false,
-            missed: true,
-            updating: null,
-            dropdown: false
-        },
-    ]
+    tasks: []
 }
 
 const controlTasks = (state = initialState, action) => {
+    let filter;
     state = { ...state };
     switch (action.type) {
+        case LOAD_TASKS:
+            action.tasks = action.tasks.map(task => {
+                task.data = {...task.data};
+                task.data.deadline = DateTime.fromISO(task.data.deadline);
+                return task;
+            });
+            state.tasks = action.tasks;
+            return state;
         case CHANGE_SEARCH:
             state.search = action.value;
             return state;
@@ -74,7 +43,7 @@ const controlTasks = (state = initialState, action) => {
             state.tasks = [...state.tasks];
             state.tasks.data = { ...state.tasks.data };
             let task = {
-                id: ++state.idController,
+                id: state.tasks.length ? +state.tasks[0].id + 1 : 1,
                 selected: false,
                 data: {
                     description: "",
@@ -89,6 +58,7 @@ const controlTasks = (state = initialState, action) => {
                 },
                 dropdown: false
             }
+
             state.tasks.unshift(task);
             return state;
         case UPDATE_TASK:
@@ -100,7 +70,9 @@ const controlTasks = (state = initialState, action) => {
                     }
                     item.dropdown = false
                 }
-      
+                
+                
+
                 return item;
             });
             return state;
@@ -120,15 +92,37 @@ const controlTasks = (state = initialState, action) => {
                 if (item.id === action.id){
                     item.complete = true
                     item.dropdown = false
+                    fetch('http://localhost/api/tasks/complete', {
+                        headers: {
+                            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                            'body': JSON.stringify([item.id]),
+                            'Content-Type': 'application/json'
+                        },
+                        method: 'PUT',
+                    })
                 }
                 return item;
             });
             return state;
         case COMPLETE_SELECTED_TASKS:
+            filter = [];
+            
             state.tasks = state.tasks.map(item => {
-                if(item.selected)
+                if(item.selected){
+                    item.selected = false;
                     item.complete = true;
+                    filter.push(item.id);
+                }
                 return item;
+            });
+
+            fetch('http://localhost/api/tasks/complete', {
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    'body': JSON.stringify(filter),
+                    'Content-Type': 'application/json'
+                },
+                method: 'PUT',
             });
             return state;
         case CHANGE_DESCRIPTION:
@@ -183,14 +177,43 @@ const controlTasks = (state = initialState, action) => {
             return state;
         case ADD_TASK:
             state.tasks = [...state.tasks];
+
+            let update;
+            
             state.tasks = state.tasks.map(item => {
                 if (item.id === action.id) {
+                    update = !!item.data.description;
                     item.data = cloneDeep(item.updating);
                     item.updating = null;
                 }
                 return item;
             });
+
+            const newTask = state.tasks.find(item => item.id === action.id);
             
+            
+            if(update){
+                fetch('http://localhost/api/tasks/', {
+                    headers: {
+                        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                        'body': JSON.stringify(newTask),
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'PUT',
+                })
+            }else{
+                fetch('http://localhost/api/tasks/', {
+                    headers: {
+                        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                        'body': JSON.stringify(newTask),
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                })
+            }
+
+
+
             return state;
         case SHOW_DROPDOWN:
             state.tasks = [...state.tasks];
@@ -204,9 +227,28 @@ const controlTasks = (state = initialState, action) => {
             return state;
         case DELETE_TASK:
             state.tasks = state.tasks.filter(item => item.id !== action.id);
+            fetch("http://localhost/api/tasks/", {
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    'body': JSON.stringify([action.id]),
+                    'Content-Type': 'application/json'
+                },
+                method:"DELETE"
+            });
             return state;
         case DELETE_SELECTED_TASKS:
+            filter = state.tasks.filter(item => item.selected).map(item => item.id);
+
             state.tasks = state.tasks.filter(item => !item.selected);
+
+            fetch("http://localhost/api/tasks/", {
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    'body': JSON.stringify(filter),
+                    'Content-Type': 'application/json'
+                },
+                method:"DELETE"
+            });
             return state;
         case SELECT_TASK:
         state.tasks = state.tasks.map(item => {
@@ -231,15 +273,43 @@ const controlTasks = (state = initialState, action) => {
             }
             return state;
         case CHECK_TASKS_DEADLINE:
+            filter = [];
             state.tasks = state.tasks.map(item => {
                 if((item.updating || item.missed || item.complete) ? false : item.data.deadline.diff(DateTime.local()) <= 0){
                     item.missed = true;
+                    filter.push(item.id);
                 }
 
                 return item;
             });
+
+            if(filter.length)
+                fetch('http://localhost/api/tasks/missed', {
+                    headers: {
+                        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                        'body': JSON.stringify(filter),
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'PUT',
+                });
+                
             return state;
         default:
+            fetch('http://localhost/api/tasks/')
+            .then(res => {
+                if(res.status !== 200) return console.log("Данные не получены!");
+                return res.json();
+            })
+            .then(tasks => {
+                tasks = tasks.map(task => {
+                    task.data = {...task.data};
+                    task.data.deadline = DateTime.fromISO(task.data.deadline);
+                    return task;
+                });
+                state.tasks = tasks;
+            }).catch(err => {
+                console.log(err);
+            });
             return state;
     }
 }

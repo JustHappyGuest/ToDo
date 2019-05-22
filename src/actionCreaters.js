@@ -1,3 +1,5 @@
+export const LOAD_TASKS = "LOAD_TASKS"; 
+
 export const CHANGE_SEARCH = "CHANGE_SEARCH";
 export const NEW_TASK = "NEW_TASK";
 export const CHANGE_DESCRIPTION = "CHANGE_DESCRIPTION";
@@ -13,7 +15,9 @@ export const SELECT_TASK = "SELECT_TASK";
 export const SELECT_ALL_TASKS = "SELECT_ALL_TASKS";
 export const COMPLETE_TASK = "COMPLETE_TASK";
 export const COMPLETE_SELECTED_TASKS = "COMPLETE_SELECTED_TASKS";
-export const CHECK_TASKS_DEADLINE = "";
+export const CHECK_TASKS_DEADLINE = "CHECK_TASKS_DEADLINE";
+
+export const loadTasks = (tasks) => ({type: LOAD_TASKS, tasks : tasks});
 
 export const changeSearch = (value) => ({type: CHANGE_SEARCH, value: value});
 export const newTask = () => ({type: NEW_TASK});
