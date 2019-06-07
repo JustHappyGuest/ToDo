@@ -1,7 +1,7 @@
 import React from "react";
 
-import Task from "./Task";
-import UpdateTask from "./UpdateTask";
+import Task from './task';
+import UpdateTask from './update-task';
 
 
 const TaskList = (props) => {

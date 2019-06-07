@@ -1,23 +1,23 @@
 import {connect} from "react-redux";
-import Tasks from "../components/Tasks";
-import { 
-            newTask, 
-            changeDescripton, 
-            cancelUpdate, 
-            changeDeadline, 
-            addTask, 
-            showDropdown, 
-            deleteTask, 
-            updateTask, 
-            selectTask, 
-            selectAllTasks, 
-            completeTask, 
+import Tasks from '../components/tasks/';
+import {
+            newTask,
+            changeDescripton,
+            cancelUpdate,
+            changeDeadline,
+            addTask,
+            showDropdown,
+            deleteTask,
+            updateTask,
+            selectTask,
+            selectAllTasks,
+            completeTask,
             deleteSelectedTasks,
             completeSelectedTasks,
             updateSelectedTasks,
             checkTasksDeadline,
             loadTasks
-        } from "../actionCreaters";
+        } from '../actions';
 
 const mapStateToProps = state => {
     return {

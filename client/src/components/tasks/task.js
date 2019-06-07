@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "./style.module.css";
+import styled from './style.module.css';
 
 const Task = props => {
     return (

@@ -2,12 +2,12 @@ import React from 'react';
 import {BrowserRouter, Route, NavLink} from 'react-router-dom';
 import './app.css';
 
-import Header from './components/Header';
-import Aside from './components/Aside';
+import Header from './components/header/index';
+import Aside from './components/aside/index';
 
-import TasksContainer from './containers/tasksContainer';
-import CompleteTasksContainer from './containers/completeTasksContainer';
-import MissedTasksContainer from './containers/missedTasksContainer';
+import TasksContainer from './containers/tasks-container';
+import CompleteTasksContainer from './containers/complete-tasks-container';
+import MissedTasksContainer from './containers/missed-tasks-container';
 
 function App() {
   return (

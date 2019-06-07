@@ -1,23 +1,27 @@
-import { 
-        NEW_TASK, 
-        CHANGE_DESCRIPTION, 
-        CANCEL_UPDATE, 
-        CHANGE_DEADLINE, 
-        ADD_TASK, 
-        SHOW_DROPDOWN, 
-        DELETE_TASK, 
-        UPDATE_TASK, 
-        SELECT_TASK, 
-        CHANGE_SEARCH, 
-        COMPLETE_TASK, 
-        DELETE_SELECTED_TASKS, 
-        SELECT_ALL_TASKS,
-        COMPLETE_SELECTED_TASKS,
-        UPDATE_SELECTED_TASKS,
-        CHECK_TASKS_DEADLINE,
-        LOAD_TASKS} from "../actionCreaters";
 import { DateTime } from "luxon";
 import {cloneDeep} from "lodash"
+
+import {
+  ADD_TASK,
+  UPDATE_TASK,
+  CANCEL_UPDATE,
+  CHANGE_DEADLINE,
+  CHANGE_DESCRIPTION,
+  CHANGE_SEARCH,
+  CHECK_TASKS_DEADLINE,
+  COMPLETE_SELECTED_TASKS,
+  COMPLETE_TASK,
+  DELETE_SELECTED_TASKS,
+  DELETE_TASK,
+  LOAD_TASKS,
+  NEW_TASK,
+  SELECT_ALL_TASKS,
+  SELECT_TASK,
+  SHOW_DROPDOWN,
+  UPDATE_SELECTED_TASKS,
+} from '../action-types/index';
+
+
 
 let initialState = {
     search : "",
@@ -70,8 +74,8 @@ const controlTasks = (state = initialState, action) => {
                     }
                     item.dropdown = false
                 }
-                
-                
+
+
 
                 return item;
             });
@@ -106,7 +110,7 @@ const controlTasks = (state = initialState, action) => {
             return state;
         case COMPLETE_SELECTED_TASKS:
             filter = [];
-            
+
             state.tasks = state.tasks.map(item => {
                 if(item.selected){
                     item.selected = false;
@@ -179,7 +183,7 @@ const controlTasks = (state = initialState, action) => {
             state.tasks = [...state.tasks];
 
             let update;
-            
+
             state.tasks = state.tasks.map(item => {
                 if (item.id === action.id) {
                     update = !!item.data.description;
@@ -190,8 +194,8 @@ const controlTasks = (state = initialState, action) => {
             });
 
             const newTask = state.tasks.find(item => item.id === action.id);
-            
-            
+
+
             if(update){
                 fetch('http://localhost/api/tasks/', {
                     headers: {
@@ -252,7 +256,7 @@ const controlTasks = (state = initialState, action) => {
             return state;
         case SELECT_TASK:
         state.tasks = state.tasks.map(item => {
-            if (item.id === action.id) 
+            if (item.id === action.id)
                 item.selected = !item.selected
             return item;
         });
@@ -292,7 +296,7 @@ const controlTasks = (state = initialState, action) => {
                     },
                     method: 'PUT',
                 });
-                
+
             return state;
         default:
             fetch('http://localhost/api/tasks/')
@@ -301,6 +305,7 @@ const controlTasks = (state = initialState, action) => {
                 return res.json();
             })
             .then(tasks => {
+
                 tasks = tasks.map(task => {
                     task.data = {...task.data};
                     task.data.deadline = DateTime.fromISO(task.data.deadline);

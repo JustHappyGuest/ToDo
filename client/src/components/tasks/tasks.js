@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "./style.module.css";
+import styled from './style.module.css';
 
-import TaskList from "./TaskList";
-import HeaderTasks from "./HeaderTasks";
+import TaskList from './task-list';
+import HeaderTasks from './header-tasks';
 
 
 class Tasks extends React.Component {
@@ -19,7 +19,7 @@ class Tasks extends React.Component {
                 <h2 className={styled.title}>{this.props.title}</h2>
                 <table className={styled.table}>
                     <thead className={styled.thead}>
-                        <HeaderTasks 
+                        <HeaderTasks
                             complete = {this.props.complete}
                             missed = {this.props.missed}
                             tasks = {this.props.tasks}
@@ -31,7 +31,7 @@ class Tasks extends React.Component {
                         />
                     </thead>
                     <tbody className={styled.tbody}>
-                        <TaskList 
+                        <TaskList
                             search = {this.props.search}
                             complete = {this.props.complete}
                             missed = {this.props.missed}

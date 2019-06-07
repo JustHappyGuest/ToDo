@@ -1,7 +1,6 @@
 import React from "react";
-import styled from "./style.module.css";
-
-import SearchContainer from "../../containers/searchContainer";
+import SearchContainer from '../../containers/search-сontainer';
+import styled from './style.module.css';
 
 const Header = (props) => {
     return (

@@ -3,10 +3,11 @@ const fs = require("fs");
 
 const server = express();
 
-server.use(express.static(__dirname + "/dist"));
+
+server.use(express.static(__dirname + "/client/dist"));
 
 server.get("/", (req, res) => {
-    const stream = fs.createReadStream(__dirname+"/dist/index.html");
+    const stream = fs.createReadStream(__dirname+"/client/dist/index.html");
     stream.pipe(res);
 });
 
@@ -29,13 +30,13 @@ server.post("/api/tasks", (req, res)=>{
         if(error) return console.error(error);
 
         let tasks = JSON.parse(data);
-        
+
         tasks.unshift(JSON.parse(req.headers.body));
-        const tasksJSON = JSON.stringify(tasks); 
+        const tasksJSON = JSON.stringify(tasks);
 
         fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
     });
-    
+
 });
 
 server.delete("/api/tasks",(req, res)=>{
@@ -47,11 +48,11 @@ server.delete("/api/tasks",(req, res)=>{
 
         tasks = tasks.filter(item => !filterTasks.includes(item.id));
 
-        const tasksJSON = JSON.stringify(tasks); 
+        const tasksJSON = JSON.stringify(tasks);
 
         fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
     });
-    
+
 });
 
 server.put("/api/tasks", (req, res)=>{
@@ -68,7 +69,7 @@ server.put("/api/tasks", (req, res)=>{
             return item;
         });
 
-        const tasksJSON = JSON.stringify(tasks); 
+        const tasksJSON = JSON.stringify(tasks);
 
         fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
     });
@@ -88,7 +89,7 @@ server.put("/api/tasks/complete", (req, res) => {
             return item;
         });
 
-        const tasksJSON = JSON.stringify(tasks); 
+        const tasksJSON = JSON.stringify(tasks);
 
         fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
     });
@@ -108,7 +109,7 @@ server.put("/api/tasks/missed", (req, res) => {
             return item;
         });
 
-        const tasksJSON = JSON.stringify(tasks); 
+        const tasksJSON = JSON.stringify(tasks);
 
         fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
     });
