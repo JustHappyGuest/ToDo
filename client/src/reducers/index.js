@@ -19,7 +19,7 @@ import {
   SELECT_TASK,
   SHOW_DROPDOWN,
   UPDATE_SELECTED_TASKS,
-} from '../action-types/index';
+} from '../action-types/';
 
 
 
@@ -32,14 +32,6 @@ const controlTasks = (state = initialState, action) => {
     let filter;
     state = { ...state };
     switch (action.type) {
-        case LOAD_TASKS:
-            action.tasks = action.tasks.map(task => {
-                task.data = {...task.data};
-                task.data.deadline = DateTime.fromISO(task.data.deadline);
-                return task;
-            });
-            state.tasks = action.tasks;
-            return state;
         case CHANGE_SEARCH:
             state.search = action.value;
             return state;

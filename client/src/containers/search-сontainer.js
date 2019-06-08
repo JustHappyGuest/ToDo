@@ -1,19 +1,24 @@
-import {connect} from "react-redux";
-import Search from '../components/search/';
-import { changeSearch } from '../actions';
+import { compose } from "redux";
+import { connect } from "react-redux";
+
+import { changeSearch } from "../actions";
+import Search from "../components/search/";
 
 const mapStateToProps = state => {
-    return {
-        search: state.controlTasks.search
-    }
-}
+  return {
+    search: state.controlTasks.search
+  };
+};
 
 const mapDispatchToProps = dispatch => {
-    return {
-        changeSearch: value => dispatch(changeSearch(value))
-    }
-}
+  return {
+    changeSearch: value => dispatch(changeSearch(value))
+  };
+};
 
-const SearchContainer = connect(mapStateToProps, mapDispatchToProps)(Search);
+const SearchContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Search);
 
 export default SearchContainer;

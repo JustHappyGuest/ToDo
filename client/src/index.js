@@ -1,10 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
+import "@babel/polyfill";
 
+import { Provider } from "react-redux";
+import React from "react";
+import ReactDOM from "react-dom";
 
-import store from './store'
+import { TodoServiceProvider } from "./components/todo-service-context";
+import TodoService from "./services/todo-service";
 
-import App from './app';
+const todoService = new TodoService();
 
-ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+todoService.getTasks().then(tasks => {
+  console.log(tasks);
+});
+
+import store from "./store";
+
+import App from "./app";
+
+ReactDOM.render(
+  <Provider store={store}>
+    <TodoServiceProvider value={todoService}>
+      <App />
+    </TodoServiceProvider>
+  </Provider>,
+  document.getElementById("root")
+);

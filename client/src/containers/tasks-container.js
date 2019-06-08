@@ -1,5 +1,6 @@
+import { compose } from 'redux';
 import {connect} from "react-redux";
-import Tasks from '../components/tasks/';
+
 import {
             newTask,
             changeDescripton,
@@ -18,6 +19,9 @@ import {
             checkTasksDeadline,
             loadTasks
         } from '../actions';
+import Tasks from '../components/tasks/';
+import {withTodoService} from '../hocs/with-todo-service';
+
 
 const mapStateToProps = state => {
     return {
@@ -50,6 +54,7 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-const TasksContainer = connect(mapStateToProps, mapDispatchToProps)(Tasks);
-
-export default TasksContainer;
+export default compose(
+  withTodoService,
+  connect(mapStateToProps, mapDispatchToProps)
+)(Tasks);
