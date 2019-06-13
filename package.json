@@ -11,6 +11,14 @@
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
-    "express": "^4.17.0"
+    "asserts": "^4.0.2",
+    "config": "^3.1.0",
+    "express": "^4.17.0",
+    "express-favicon": "^2.0.1",
+    "fs-extra": "^8.0.1",
+    "lorem-ipsum": "^2.0.3",
+    "luxon": "^1.16.0",
+    "mime": "^2.4.4",
+    "request": "^2.88.0"
   }
 }

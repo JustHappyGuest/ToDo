@@ -1,118 +1,37 @@
-const express = require("express");
+const express = require('express');
+const favicon = require('express-favicon');
+
+const config = require("config");
+
 const fs = require("fs");
+const path = require("path");
 
-const server = express();
+const getTasks = require('./get-tasks');
+const pageSent = require('./sent-page.js');
+const createTask = require('./create-task.js');
+
+const distRoot = config.get('distRoot');
+const jsonRoot = config.get('jsonRoot');
+
+const port = config.get('port');
+const app = express();
 
 
-server.use(express.static(__dirname + "/client/dist"));
+app.use(express.static(distRoot));
+app.use(favicon(path.join(distRoot, 'favicon.png')));
 
-server.get("/", (req, res) => {
-    const stream = fs.createReadStream(__dirname+"/client/dist/index.html");
-    stream.pipe(res);
+app.get('/api/tasks', (req, res) => {
+  getTasks(jsonRoot, res);
 });
 
-server.get("/api/tasks", (req, res) => {
-    let tasksJSON = "";
-    const stream = fs.createReadStream('./db/tasks.json', {encoding : "utf-8"});
-
-    stream.on('data', (chunk) => {
-        tasksJSON += chunk;
-    });
-
-    stream.on('end', () => {
-        const json = JSON.parse(tasksJSON);
-        res.json(json);
-    });
+app.post("/api/tasks", (req, res) => {
+  createTask(jsonRoot, req, res);
 });
 
-server.post("/api/tasks", (req, res)=>{
-    fs.readFile('./db/tasks.json', (error, data)=>{
-        if(error) return console.error(error);
-
-        let tasks = JSON.parse(data);
-
-        tasks.unshift(JSON.parse(req.headers.body));
-        const tasksJSON = JSON.stringify(tasks);
-
-        fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
-    });
-
+app.get('*', (req, res) => {
+  pageSent(distRoot, res);
 });
 
-server.delete("/api/tasks",(req, res)=>{
-    fs.readFile('./db/tasks.json', (error, data)=>{
-        if(error) return console.error(error);
-
-        let tasks = JSON.parse(data);
-        const filterTasks = JSON.parse(req.headers.body).map(item => + item);
-
-        tasks = tasks.filter(item => !filterTasks.includes(item.id));
-
-        const tasksJSON = JSON.stringify(tasks);
-
-        fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
-    });
-
+app.listen(port, err => {
+  if (err) console.error(err);
 });
-
-server.put("/api/tasks", (req, res)=>{
-    fs.readFile('./db/tasks.json', (error, data)=>{
-        if(error) return console.error(error);
-
-        let tasks = JSON.parse(data);
-
-        const updateItem = JSON.parse(req.headers.body);
-
-        tasks = tasks.map(item => {
-            if(item.id === updateItem.id)
-                return updateItem;
-            return item;
-        });
-
-        const tasksJSON = JSON.stringify(tasks);
-
-        fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
-    });
-});
-
-server.put("/api/tasks/complete", (req, res) => {
-    fs.readFile('./db/tasks.json', (error, data)=>{
-        if(error) return console.error(error);
-
-        let tasks = JSON.parse(data);
-
-        const completeItem = JSON.parse(req.headers.body);
-
-        tasks = tasks.map(item => {
-            if(completeItem.includes(item.id))
-                item.complete = true;
-            return item;
-        });
-
-        const tasksJSON = JSON.stringify(tasks);
-
-        fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
-    });
-});
-
-server.put("/api/tasks/missed", (req, res) => {
-    fs.readFile('./db/tasks.json', (error, data)=>{
-        if(error) return console.error(error);
-
-        let tasks = JSON.parse(data);
-
-        const missedItem = JSON.parse(req.headers.body);
-
-        tasks = tasks.map(item => {
-            if(missedItem.includes(item.id))
-                item.missed = true;
-            return item;
-        });
-
-        const tasksJSON = JSON.stringify(tasks);
-
-        fs.writeFile('./db/tasks.json', tasksJSON, (error) => console.error(error));
-    });
-});
-
-server.listen(80, () => console.log("Run..."));

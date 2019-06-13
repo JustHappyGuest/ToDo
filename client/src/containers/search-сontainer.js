@@ -4,11 +4,7 @@ import { connect } from "react-redux";
 import { changeSearch } from "../actions";
 import Search from "../components/search/";
 
-const mapStateToProps = state => {
-  return {
-    search: state.controlTasks.search
-  };
-};
+const mapStateToProps = ({ search }) => ({ search });
 
 const mapDispatchToProps = dispatch => {
   return {

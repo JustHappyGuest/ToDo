@@ -9,10 +9,6 @@ import TodoService from "./services/todo-service";
 
 const todoService = new TodoService();
 
-todoService.getTasks().then(tasks => {
-  console.log(tasks);
-});
-
 import store from "./store";
 
 import App from "./app";

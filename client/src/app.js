@@ -17,8 +17,8 @@ function App() {
         <Header/>
         <Aside />
         <main className="main">
-          <Route exact path="/" component={TasksContainer}/>
-          <Route exact path="/tasks" component={TasksContainer}/>
+          <Route exact path="/" render={()=><TasksContainer />}/>
+          <Route exact path="/tasks" render={()=><TasksContainer/>}/>
           <Route exact path="/tasks/completed" component={CompleteTasksContainer}/>
           <Route exact path="/tasks/missed" component={MissedTasksContainer}/>
         </main>

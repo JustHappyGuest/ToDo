@@ -1,8 +1,13 @@
-import { createStore, combineReducers } from "redux";
-import controlTasks from './reducers/';
+import { applyMiddleware, compose, createStore } from "redux";
+import thunk from "redux-thunk";
 
-let  reducers = combineReducers({controlTasks});
+import reducer from "./reducers/";
 
-let store = createStore(reducers);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  reducer,
+  composeEnhancers(applyMiddleware(thunk))
+);
 
 export default store;
