@@ -23,9 +23,10 @@ class Tasks extends React.Component {
       changeDescriptonTask,
       changeDeadlineTask,
       cancelUpdateTask,
-      addTask
+      addTask,
+      changeDropdown
     } = this.props;
-    const { data, update } = this.props.tasks;
+    const { data, update, dropdown } = this.props.tasks;
     const showUpdate = !!update && (
       <UpdateRow
         {...{
@@ -56,7 +57,7 @@ class Tasks extends React.Component {
           </thead>
           <tbody className={styled.tbody}>
             {showUpdate}
-            <TasksList data={data} />
+            <TasksList {...{data, dropdown, changeDropdown}} />
           </tbody>
         </table>
       </section>

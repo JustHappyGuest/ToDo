@@ -1,36 +1,17 @@
-import {cloneDeep} from "lodash";
+import { cloneDeep } from "lodash";
 
 import {
   ADD_TASK,
   CANCEL_UPDATE_TASK,
   CHANGE_DEADLINE_TASK,
   CHANGE_DESCRIPTION_TASK,
+  CHANGE_DROPDOWN,
   FETCH_TASKS_SUCCESS,
   SHOW_UPDATE_ROW
 } from '../action-types';
+import createReducer from '../utils/createReducer';
 
-/*
 
-{
-    search: "",
-    tasks : {
-      data : [
-          {
-            description: '',
-            deadline: ''
-        }
-      ],
-      update : [
-        {
-          description: '',
-          deadline: ''
-        }
-      ],
-      dropdown: null
-    }
-}
-
-*/
 
 let initialState = {
   search: "",
@@ -43,21 +24,96 @@ let initialState = {
   missed: []
 };
 
-const reducer = (state = initialState, { type, payload }) => {
-  let filter;
-  state = { ...state };
-  switch (type) {
-    case FETCH_TASKS_SUCCESS: {
-      const { tasks } = state;
-      const { data } = payload;
-      return {
-        ...state,
-        tasks: {
-          ...tasks,
-          data
+const reducer = createReducer(initialState, {
+  [FETCH_TASKS_SUCCESS]: (state, { payload: {data} }) => {
+    const { tasks } = state;
+
+    return {
+      ...state,
+      tasks: {
+        ...tasks,
+        data
+      }
+    };
+  },
+  [SHOW_UPDATE_ROW]: (state, { payload: {deadline, id} }) => {
+    const { tasks } = state;
+    if (!id) id = tasks.data[0].id + 1;
+    return {
+      ...state,
+      tasks: {
+        ...tasks,
+        update: {
+          id,
+          description: "",
+          deadline
         }
-      };
+      }
+    };
+  },
+  [CHANGE_DESCRIPTION_TASK]: (state, { payload: {value: description} }) => {
+    const { tasks } = state;
+    const { update } = tasks;
+    return {
+      ...state,
+      tasks: {
+        ...tasks,
+        update: {
+          ...update,
+          description
+        }
+      }
+    };
+  },
+  [CHANGE_DEADLINE_TASK]: (state, { payload: {newDate: deadline} }) => {
+    const { tasks } = state;
+    const { update } = tasks;
+    return {
+      ...state,
+      tasks: {
+        ...tasks,
+        update: {
+          ...update,
+          deadline
+        }
+      }
+    };
+  },
+  [CANCEL_UPDATE_TASK]: (state) => {
+    const { tasks } = state;
+    return {
+      ...state,
+      tasks: {
+        ...tasks,
+        update: null
+      }
+    };
+  },
+  [ADD_TASK]: (state) => {
+    const { tasks } = state;
+    const { update, data } = tasks;
+    const task = cloneDeep(update);
+    return {
+      ...state,
+      tasks: {
+        ...tasks,
+        data: [task, ...data],
+        update: null
+      }
+    };
+  },
+  [CHANGE_DROPDOWN]: (state, {payload: {id} }) => {
+    const {tasks} = state;
+    id = id === tasks.dropdown ? 0 : id;
+    return {
+      ...state,
+      tasks: {
+        ...tasks,
+        dropdown: id
+      }
     }
+  }
+});
 
     // case CHANGE_SEARCH: {
     //   const { value } = payload;
@@ -65,25 +121,7 @@ const reducer = (state = initialState, { type, payload }) => {
     //   state.search = value;
     //   return state;
     // }
-    case SHOW_UPDATE_ROW: {
-      const { deadline } = payload;
-      let { id } = payload;
-      const { tasks } = state;
 
-      if(!id) id = tasks.data[0].id + 1;
-
-      return {
-        ...state,
-        tasks: {
-          ...tasks,
-          update: {
-            id,
-            description: "",
-            deadline
-          }
-        }
-      };
-    }
     // case UPDATE_TASK: {
     //   const { id } = payload;
     //
@@ -153,63 +191,6 @@ const reducer = (state = initialState, { type, payload }) => {
     //     method: "PUT"
     //   });
     //   return state;
-    case CHANGE_DESCRIPTION_TASK: {
-      const { value: description } = payload;
-      const { tasks } = state;
-      const { update } = tasks;
-      return {
-        ...state,
-        tasks: {
-          ...tasks,
-          update: {
-            ...update,
-            description
-          }
-        }
-      };
-    }
-
-    case CHANGE_DEADLINE_TASK: {
-      const {tasks} = state;
-      const {update} = tasks;
-      const { newDate: deadline} = payload;
-      return {
-        ...state,
-        tasks:{
-          ...tasks,
-          update:{
-            ...update,
-            deadline
-          }
-        }
-      };
-    }
-
-    case CANCEL_UPDATE_TASK: {
-      const { tasks } = state;
-      return {
-        ...state,
-        tasks: {
-          ...tasks,
-          update: null
-        }
-      };
-    }
-
-    case ADD_TASK:{
-      const {tasks} = state;
-      const {update, data} = tasks;
-      const task = cloneDeep(update);
-
-      return {
-        ...state,
-        tasks: {
-          ...tasks,
-          data: [task, ...data],
-          update: null
-        }
-      };
-    }
 
     // case SHOW_DROPDOWN:
     //   state.tasks = [...state.tasks];
@@ -293,9 +274,6 @@ const reducer = (state = initialState, { type, payload }) => {
     //     });
     //
     //   return state;
-    default:
-      return state;
-  }
-};
+
 
 export default reducer;

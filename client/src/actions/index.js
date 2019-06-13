@@ -5,6 +5,7 @@ import {
   CANCEL_UPDATE_TASK,
   CHANGE_DEADLINE_TASK,
   CHANGE_DESCRIPTION_TASK,
+  CHANGE_DROPDOWN,
   CHANGE_SEARCH,
   CHECK_TASKS_DEADLINE,
   COMPLETE_SELECTED_TASKS,
@@ -14,11 +15,10 @@ import {
   FETCH_TASKS_SUCCESS,
   SELECT_ALL_TASKS,
   SELECT_TASK,
-  SHOW_DROPDOWN,
   SHOW_UPDATE_ROW,
   UPDATE_SELECTED_TASKS,
   UPDATE_TASK
-} from "../action-types";
+} from '../action-types';
 
 export const fetchTasksSuccess = ({getTasks}) => dispatch => () => {
   getTasks().then(data => {
@@ -59,7 +59,8 @@ export const changeSearch = value => ({
   payload: { value }
 });
 
-export const showDropdown = id => ({ type: SHOW_DROPDOWN, payload: { id } });
+export const changeDropdown = id => ({ type: CHANGE_DROPDOWN, payload: { id } });
+
 export const deleteTask = id => ({ type: DELETE_TASK, payload: { id } });
 export const deleteSelectedTasks = () => ({ type: DELETE_SELECTED_TASKS });
 export const updateTask = id => ({ type: UPDATE_TASK, payload: { id } });

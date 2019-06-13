@@ -1,4 +1,4 @@
-import { compose } from "redux";
+import { bindActionCreators, compose } from 'redux';
 import { connect } from "react-redux";
 
 import {
@@ -6,6 +6,7 @@ import {
   cancelUpdateTask,
   changeDeadlineTask,
   changeDescriptonTask,
+  changeDropdown,
   fetchTasksSuccess,
   showUpdateRow
 } from '../actions';
@@ -29,20 +30,8 @@ const mapDispatchToProps = (dispatch, { todoService }) => {
     changeDescriptonTask: (value) => dispatch(changeDescriptonTask(value)),
     changeDeadlineTask: (date, difference) => dispatch(changeDeadlineTask(date, difference)),
     cancelUpdateTask: () => dispatch(cancelUpdateTask()),
-    addTask: dispatch(addTask(todoService))
-    //changeDeadline: (id, direction) => dispatch(changeDeadline(id, direction)),
-    //cancelUpdate: id => dispatch(cancelUpdate(id)),
-    //addTask: id => dispatch(addTask(id)),
-    //showDropdown: id => dispatch(showDropdown(id)),
-    //deleteTask: id => dispatch(deleteTask(id)),
-    //deleteSelectedTasks: () => dispatch(deleteSelectedTasks()),
-    //updateTask: id => dispatch(updateTask(id)),
-    //updateSelectedTasks: () => dispatch(updateSelectedTasks()),
-    //selectTask: id => dispatch(selectTask(id)),
-    //selectAllTasks: () => dispatch(selectAllTasks()),
-    //completeTask: id => dispatch(completeTask(id)),
-    //completeSelectedTasks: () => dispatch(completeSelectedTasks()),
-    //checkTasksDeadline: () => dispatch(checkTasksDeadline())
+    addTask: dispatch(addTask(todoService)),
+    changeDropdown: (id) => dispatch(changeDropdown(id))
   };
 };
 

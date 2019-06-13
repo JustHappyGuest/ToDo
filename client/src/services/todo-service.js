@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 
 export default class TodoService {
-  _apiBase = "http://localhost:8081/api/";
+  _apiBase = "http://localhost:80/api/";
 
   getResource = async name => {
     const url = this._apiBase + name;
