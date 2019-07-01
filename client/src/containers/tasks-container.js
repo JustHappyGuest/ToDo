@@ -1,23 +1,30 @@
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 import { connect } from "react-redux";
+import React, {useEffect} from 'react';
 
 import {
-  addTask,
+  confirmUpdateRow,
   cancelUpdateTask,
   changeDeadlineTask,
   changeDescriptonTask,
-  changeDropdown,
-  fetchTasksSuccess,
-  showUpdateRow
+  deleteTask,
+  fetchTasks,
+  showUpdateRow,
+  updateTask
 } from '../actions';
 import { withTodoService } from "../hocs/with-todo-service";
-import Tasks from "../components/tasks/";
+import Tasks from "../components/table/";
 
-const mapStateToProps = ({search, tasks}, {complete, missed}) => {
+const TasksContainer = (props) => {
+  const {fetchTasks, ...restProps} = props;
+  useEffect(()=> {
+    fetchTasks()
+  }, []);
+  return <Tasks {...restProps} />
+}
+
+const mapStateToProps = ({search, tasks}) => {
   return {
-    title: "Активные задачи",
-    complete,
-    missed,
     search,
     tasks
   };
@@ -25,13 +32,14 @@ const mapStateToProps = ({search, tasks}, {complete, missed}) => {
 
 const mapDispatchToProps = (dispatch, { todoService }) => {
   return {
-    fetchTasksSuccess: dispatch(fetchTasksSuccess(todoService)),
+    fetchTasks: dispatch(fetchTasks(todoService)),
     showUpdateRow: dispatch(showUpdateRow),
     changeDescriptonTask: (value) => dispatch(changeDescriptonTask(value)),
     changeDeadlineTask: (date, difference) => dispatch(changeDeadlineTask(date, difference)),
     cancelUpdateTask: () => dispatch(cancelUpdateTask()),
-    addTask: dispatch(addTask(todoService)),
-    changeDropdown: (id) => dispatch(changeDropdown(id))
+    confirmUpdateRow: dispatch(confirmUpdateRow(todoService)),
+    deleteTask: dispatch(deleteTask(todoService)),
+    updateTask: (id) => dispatch(updateTask(id))
   };
 };
 
@@ -41,4 +49,4 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps
   )
-)(Tasks);
+)(TasksContainer);

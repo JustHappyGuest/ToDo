@@ -1,279 +1,58 @@
-import { cloneDeep } from "lodash";
-
 import {
   ADD_TASK,
   CANCEL_UPDATE_TASK,
   CHANGE_DEADLINE_TASK,
   CHANGE_DESCRIPTION_TASK,
-  CHANGE_DROPDOWN,
+  CLEAR_USER_SUCCESS,
+  DELETE_TASK,
+  FETCH_TASKS_COMPLETE_REQUEST,
+  FETCH_TASKS_COMPLETE_SUCCESS,
+  FETCH_TASKS_MISS_REQUEST,
+  FETCH_TASKS_MISS_SUCCESS,
+  FETCH_TASKS_REQUEST,
   FETCH_TASKS_SUCCESS,
-  SHOW_UPDATE_ROW
+  GET_USER_FAILURE,
+  GET_USER_SUCCESS,
+  SHOW_UPDATE_ROW,
+  UPDATE_TASK
 } from '../action-types';
-import createReducer from '../utils/createReducer';
 
-
-
-let initialState = {
-  search: "",
-  tasks: {
-    data: [],
-    update: null,
-    dropdown: null
-  },
-  completed: [],
-  missed: []
-};
+import addTask                    from "./addTask";
+import cancelUpdateTask           from "./cancelUpdateTask";
+import changeDeadlineTask         from "./changeDeadlineTask";
+import changeDescriptonTask       from "./changeDescriptionTask";
+import clearUserSuccess           from "./clearUserSuccess";
+import createReducer              from "../utils/createReducer";
+import deleteTask                 from "./deleteTask";
+import fetchTasksCompleteRequest  from './fetchTasksCompleteRequest';
+import fetchTasksCompleteSuccess  from "./fetchTasksCompleteSuccess";
+import fetchTasksMissRequest      from './fetchTasksMissRequest';
+import fetchTasksMissSuccess      from "./fetchTasksMissSuccess";
+import fetchTasksRequest          from "./fetchTasksRequest";
+import fetchTasksSuccess          from "./fetchTasksSuccess";
+import getUserFailure             from "./getUserFailure";
+import getUserSuccess             from "./getUserSuccess";
+import initialState               from "../initialState";
+import showUpdateRow              from "./showUpdateRow";
+import updateTask                 from "./updateTask";
 
 const reducer = createReducer(initialState, {
-  [FETCH_TASKS_SUCCESS]: (state, { payload: {data} }) => {
-    const { tasks } = state;
-
-    return {
-      ...state,
-      tasks: {
-        ...tasks,
-        data
-      }
-    };
-  },
-  [SHOW_UPDATE_ROW]: (state, { payload: {deadline, id} }) => {
-    const { tasks } = state;
-    if (!id) id = tasks.data[0].id + 1;
-    return {
-      ...state,
-      tasks: {
-        ...tasks,
-        update: {
-          id,
-          description: "",
-          deadline
-        }
-      }
-    };
-  },
-  [CHANGE_DESCRIPTION_TASK]: (state, { payload: {value: description} }) => {
-    const { tasks } = state;
-    const { update } = tasks;
-    return {
-      ...state,
-      tasks: {
-        ...tasks,
-        update: {
-          ...update,
-          description
-        }
-      }
-    };
-  },
-  [CHANGE_DEADLINE_TASK]: (state, { payload: {newDate: deadline} }) => {
-    const { tasks } = state;
-    const { update } = tasks;
-    return {
-      ...state,
-      tasks: {
-        ...tasks,
-        update: {
-          ...update,
-          deadline
-        }
-      }
-    };
-  },
-  [CANCEL_UPDATE_TASK]: (state) => {
-    const { tasks } = state;
-    return {
-      ...state,
-      tasks: {
-        ...tasks,
-        update: null
-      }
-    };
-  },
-  [ADD_TASK]: (state) => {
-    const { tasks } = state;
-    const { update, data } = tasks;
-    const task = cloneDeep(update);
-    return {
-      ...state,
-      tasks: {
-        ...tasks,
-        data: [task, ...data],
-        update: null
-      }
-    };
-  },
-  [CHANGE_DROPDOWN]: (state, {payload: {id} }) => {
-    const {tasks} = state;
-    id = id === tasks.dropdown ? 0 : id;
-    return {
-      ...state,
-      tasks: {
-        ...tasks,
-        dropdown: id
-      }
-    }
-  }
+  [FETCH_TASKS_SUCCESS]:          fetchTasksSuccess,
+  [FETCH_TASKS_REQUEST]:          fetchTasksRequest,
+  [FETCH_TASKS_COMPLETE_SUCCESS]: fetchTasksCompleteSuccess,
+  [FETCH_TASKS_COMPLETE_REQUEST]: fetchTasksCompleteRequest,
+  [FETCH_TASKS_MISS_SUCCESS]:     fetchTasksMissSuccess,
+  [FETCH_TASKS_MISS_REQUEST]:     fetchTasksMissRequest,
+  [SHOW_UPDATE_ROW]:              showUpdateRow,
+  [CHANGE_DESCRIPTION_TASK]:      changeDescriptonTask,
+  [CHANGE_DEADLINE_TASK]:         changeDeadlineTask,
+  [CANCEL_UPDATE_TASK]:           cancelUpdateTask,
+  [ADD_TASK]:                     addTask,
+  [GET_USER_SUCCESS]:             getUserSuccess,
+  [GET_USER_FAILURE]:             getUserFailure,
+  [CLEAR_USER_SUCCESS]:           clearUserSuccess,
+  [DELETE_TASK]:                  deleteTask,
+  [UPDATE_TASK]:                  updateTask
 });
-
-    // case CHANGE_SEARCH: {
-    //   const { value } = payload;
-    //
-    //   state.search = value;
-    //   return state;
-    // }
-
-    // case UPDATE_TASK: {
-    //   const { id } = payload;
-    //
-    //   state.tasks = state.tasks.map(item => {
-    //     if (item.id === id) {
-    //       item.updating = {
-    //         description: item.data.description,
-    //         deadline: item.data.deadline
-    //       };
-    //       item.dropdown = false;
-    //     }
-    //
-    //     return item;
-    //   });
-    //   return state;
-    // }
-    // case UPDATE_SELECTED_TASKS:
-    //   state.tasks = state.tasks.map(item => {
-    //     if (item.selected)
-    //       item.updating = {
-    //         description: item.data.description,
-    //         deadline: item.data.deadline
-    //       };
-    //     item.selected = false;
-    //     return item;
-    //   });
-    //   return state;
-    // case COMPLETE_TASK: {
-    //   const { id } = payload;
-    //
-    //   state.tasks = state.tasks.map(item => {
-    //     if (item.id === id) {
-    //       item.complete = true;
-    //       item.dropdown = false;
-    //       fetch("http://localhost/api/tasks/complete", {
-    //         headers: {
-    //           "Content-type":
-    //             "application/x-www-form-urlencoded; charset=UTF-8",
-    //           body: JSON.stringify([item.id]),
-    //           "Content-Type": "application/json"
-    //         },
-    //         method: "PUT"
-    //       });
-    //     }
-    //     return item;
-    //   });
-    //   return state;
-    // }
-    // case COMPLETE_SELECTED_TASKS:
-    //   filter = [];
-    //
-    //   state.tasks = state.tasks.map(item => {
-    //     if (item.selected) {
-    //       item.selected = false;
-    //       item.complete = true;
-    //       filter.push(item.id);
-    //     }
-    //     return item;
-    //   });
-    //
-    //   fetch("http://localhost/api/tasks/complete", {
-    //     headers: {
-    //       "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-    //       body: JSON.stringify(filter),
-    //       "Content-Type": "application/json"
-    //     },
-    //     method: "PUT"
-    //   });
-    //   return state;
-
-    // case SHOW_DROPDOWN:
-    //   state.tasks = [...state.tasks];
-    //   state.tasks.forEach(item => {
-    //     if (item.id === action.id) {
-    //       item.dropdown = !item.dropdown;
-    //     } else {
-    //       item.dropdown = false;
-    //     }
-    //   });
-    //   return state;
-    // case DELETE_TASK:
-    //   state.tasks = state.tasks.filter(item => item.id !== action.id);
-    //   fetch("http://localhost:8080/api/tasks/", {
-    //     headers: {
-    //       "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-    //       body: JSON.stringify([action.id]),
-    //       "Content-Type": "application/json"
-    //     },
-    //     method: "DELETE"
-    //   });
-    //   return state;
-    // case DELETE_SELECTED_TASKS:
-    //   filter = state.tasks.filter(item => item.selected).map(item => item.id);
-    //
-    //   state.tasks = state.tasks.filter(item => !item.selected);
-    //
-    //   fetch("http://localhost:8080/api/tasks/", {
-    //     headers: {
-    //       "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-    //       body: JSON.stringify(filter),
-    //       "Content-Type": "application/json"
-    //     },
-    //     method: "DELETE"
-    //   });
-    //   return state;
-    // case SELECT_TASK:
-    //   state.tasks = state.tasks.map(item => {
-    //     if (item.id === action.id) item.selected = !item.selected;
-    //     return item;
-    //   });
-    //   return state;
-    // case SELECT_ALL_TASKS:
-    //   if (
-    //     state.tasks.every(item => item.selected || item.complete || item.missed)
-    //   ) {
-    //     state.tasks = state.tasks.map(item => {
-    //       if (!item.complete && !item.missed) item.selected = false;
-    //       return item;
-    //     });
-    //   } else {
-    //     state.tasks = state.tasks.map(item => {
-    //       if (!item.complete && !item.missed) item.selected = true;
-    //       return item;
-    //     });
-    //   }
-    //   return state;
-    // case CHECK_TASKS_DEADLINE:
-    //   filter = [];
-    //   state.tasks = state.tasks.map(item => {
-    //     if (
-    //       item.updating || item.missed || item.complete
-    //         ? false
-    //         : item.data.deadline.diff(DateTime.local()) <= 0
-    //     ) {
-    //       item.missed = true;
-    //       filter.push(item.id);
-    //     }
-    //
-    //     return item;
-    //   });
-    //
-    //   if (filter.length)
-    //     fetch("http://localhost:8080/api/tasks/missed", {
-    //       headers: {
-    //         "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-    //         body: JSON.stringify(filter),
-    //         "Content-Type": "application/json"
-    //       },
-    //       method: "PUT"
-    //     });
-    //
-    //   return state;
-
 
 export default reducer;

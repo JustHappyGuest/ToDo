@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 
 export default class TodoService {
-  _apiBase = "http://localhost:80/api/";
+  _apiBase = "http://localhost/api/";
 
   getResource = async name => {
     const url = this._apiBase + name;
@@ -12,32 +12,65 @@ export default class TodoService {
     return body;
   };
 
-  _transformTaskDateToObj = task => ({...task, deadline: DateTime.fromISO(task.deadline)});
+  deleteResource = async (name, param) => {
+    const url = `${this._apiBase}${name}/${param}`;
+    const res = await fetch(url, {
+      method: "delete"
+    });
+    if (!res.ok)
+      throw new Error(`Could not fetch ${url}, recived ${res.status}`);
+    return res.json();
+  };
 
-  getTasks = async () => {
-    const tasks = await this.getResource("tasks");
+  postResource = async (name, data) => {
+    const url = this._apiBase + name;
+    const json = JSON.stringify(data);
+    const res = await fetch(url, {
+      method: "post",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: json
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  };
+
+  putResource = async (name, param, data) => {
+    const url = `${this._apiBase}${name}/${param}`;
+    const json = JSON.stringify(data);
+    const res = await fetch(url, {
+      method: "put",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: json
+    });
+    if(!res.ok) throw new Error(await res.text);
+    return res.json();
+  }
+
+  _transformTaskDateToObj = task => ({
+    ...task,
+    deadline: DateTime.fromISO(task.deadline)
+  });
+
+  _transformTaskDateToISO = task => ({
+    ...task,
+    deadline: task.deadline.toString()
+  });
+
+  getTasks = async (state = "") => {
+    const tasks = await this.getResource(`tasks/${state}`);
     return tasks.map(this._transformTaskDateToObj);
   };
 
-  createResource = async (name, data) => {
-    const url = this._apiBase + name;
-    const json = JSON.stringify(data);
+  createTask = async data =>
+    this.postResource("tasks", this._transformTaskDateToISO(data));
 
-    const res = await fetch(url, {
-      method: 'post',
-      headers: {
-        "Content-type": "text/json; charset=UTF-8"
-      },
-      body:json
-    });
-
-    if(!res.ok)
-      throw new Error(`Could not fetch ${url}, recived ${res.status}`);
-
-    return res.ok;
-  };
-
-  _transformTaskDateToISO = task => ({...task, deadline: task.deadline.toString()});
-
-  createTask = async (data) => this.createResource("tasks", this._transformTaskDateToISO(data));
+  signIn = async data => this.postResource("user/login", data);
+  getUserData = async () => this.getResource("user");
+  logOut = async () => this.getResource("user/logout");
+  deleteTask = async id => this.deleteResource("tasks", id);
+  updateTask = async (id, data) => this.putResource("tasks", id, data);
 }

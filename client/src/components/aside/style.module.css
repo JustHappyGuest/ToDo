@@ -1,5 +1,5 @@
 .aside{
-    padding: 50px 0;
+    padding: 10px;
     background-color: #363636;
     grid-area: aside;
   }
@@ -12,6 +12,7 @@
     display: block;
     cursor: pointer;
     padding: 1rem;
+    color: inherit;
   }
 
   .menu > .item i{
@@ -21,12 +22,21 @@
   .menu > .item > a:hover{
     background: linear-gradient(90deg, #f4566c, #f193fa);
   }
+
+  .active {
+    background: linear-gradient(90deg, #f4566c, #f193fa);
+  }
+
   .dropdown{
-    margin: 5px 0; 
+    margin: 5px 0;
   }
   .dropdown > .item{
-    color: #9d9d9d;
+
     font-size: .875rem;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
     margin-left: 30px;
+  }
+
+  .dropdown > .item a {
+    color: #9d9d9d;
   }
